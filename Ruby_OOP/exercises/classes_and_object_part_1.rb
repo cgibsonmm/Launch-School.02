@@ -30,6 +30,10 @@ class MyCar
     "#{speed} mph"
   end
 
+  def self.find_gas_mileage(gallons, miles)
+    puts "#{miles/ gallons} miles per gallon of gas"
+  end
+
   def spray_paint(color)
     self.color = color
     puts "Your new color is #{color}"
@@ -37,5 +41,9 @@ class MyCar
 
   def car_status
     "Your #{year} #{color} #{model}, is #{ignition_status} and moving #{display_speed}"
+  end
+
+  def to_s
+    car_status
   end
 end
