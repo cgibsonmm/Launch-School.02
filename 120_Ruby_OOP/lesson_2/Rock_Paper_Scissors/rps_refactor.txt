@@ -1,0 +1,9 @@
+1. is this design, with Human and Computer sub-classes, better? Why, or why not?
+  - The design of the RPS game is improved because we eliminate unnecessary redundancies and logic that is no handled directly and more intelligently.
+
+2. what is the primary improvement of this new design?
+  - There is less use of conditionals in the player, computer, human classes,
+  now the classes are aware of their state(human, computer)
+
+3. what is the primary drawback of this new design?
+  - The only draw back I can see is that we are still forced to repeat method definitions in different classes (example: set_name, choose), there may be a way to handle this with a mixin but it may not be worth the effort of rebuilding the necessary conditionals that were once deleted.
