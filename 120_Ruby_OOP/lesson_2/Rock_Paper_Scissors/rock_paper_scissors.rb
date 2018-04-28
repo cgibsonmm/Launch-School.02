@@ -1,7 +1,7 @@
 require 'pry'
 
 class Move
-  VALUES = %w[rock paper scissors]
+  VALUES = %w[rock paper scissors lizard spock]
 
   def initialize(value)
     @value = value
@@ -31,16 +31,29 @@ class Move
     @value == 'scissors'
   end
 
+  def lizard?
+    @value == 'lizard'
+  end
+
+  def spock?
+    @value = 'spock'
+  end
+
   def to_s
     @value
   end
 end
 
 class Player
-  attr_accessor :move, :name
+  attr_accessor :move, :name, :score
 
   def initialize
     set_name
+    @score = 0
+  end
+
+  def reset_score
+    @score = 0
   end
 end
 
@@ -80,11 +93,12 @@ end
 
 # Game Engine
 class RPSGame
-  attr_accessor :human, :computer
+  attr_accessor :human, :computer, :winner
 
   def initialize
     @human = Human.new
     @computer = Computer.new
+    @winner = nil
   end
 
   def display_welcome_message
@@ -102,8 +116,10 @@ class RPSGame
 
   def display_winner
     if human.move > computer.move
+      human.score += 1
       puts "#{human.name} won!"
     elsif human.move < computer.move
+      computer.score += 1
       puts "#{computer.name} won!"
     else
       puts "It's a tie!"
@@ -121,14 +137,50 @@ class RPSGame
     answer.downcase == 'y' ? true : false
   end
 
+  def display_scores
+    puts "The current score is computer: #{computer.score} to #{human.name}: #{human.score}"
+  end
+
+  def calculate_scores
+    @winner = human if human.score == 3
+    @winner = computer if computer.score == 3
+  end
+
+  def display_champion_message
+    puts "Congrats you're the winner!" if @winner == human
+    puts "Better luck next time!"      if @winner == computer
+  end
+
+  def reset_champion
+    @winner = nil
+  end
+
+  def turn_scoring
+    calculate_scores
+    display_scores
+  end
+
+  def game_cleanup
+    reset_champion
+    human.reset_score
+    computer.reset_score
+  end
+
   def play
     display_welcome_message
 
+    # need to implement a way to set score and detect when a player reaches 10  # points
     loop do
-      human.choose
-      computer.choose
-      display_moves
-      display_winner
+      loop do
+        human.choose
+        computer.choose
+        display_moves
+        display_winner
+        turn_scoring
+        break unless winner.nil?
+      end
+      display_champion_message
+      game_cleanup
       break unless play_again?
     end
     display_goodbye_message

@@ -7,9 +7,13 @@ class Machine
     flip_switch(:off)
   end
 
+  def switch_postistion(string)
+    string == 'on' ? start : stop
+  end
+
   private
 
-  attr_writer :switch
+  attr_accessor :switch
 
   def flip_switch(desired_state)
     self.switch = desired_state
