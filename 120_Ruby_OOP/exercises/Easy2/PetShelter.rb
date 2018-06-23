@@ -1,51 +1,50 @@
 class Pet
-  attr_reader :name, :animal
-  def initialize(animal, name)
-    @animal = animal
+  attr_reader :name, :species
+  def initialize(species, name)
+    @species = species
     @name = name
   end
 
   def to_s
-    "a #{animal} named #{name}"
+    "a #{species} named #{name}"
   end
 end
 
 class Owner
-  attr_reader :name, :pets
+  attr_reader :name
+  attr_accessor :pets
   def initialize(name)
     @name = name
     @pets = []
-  end
-
-  def number_of_pets
-    pets.size
   end
 
   def add_pet(pet)
     pets << pet
   end
 
-   def print_pets
-     pets.each { |pet| puts pet }
-   end
+  def number_of_pets
+    pets.size
+  end
 end
 
 class Shelter
-  attr_accessor :adoptions
+  attr_accessor :adopters
   def initialize
-    @owners = {}
+    @adopters = []
   end
 
   def adopt(owner, pet)
     owner.add_pet(pet)
-    @owners[owner.name] ||= owner
+    adopters << owner
   end
 
   def print_adoptions
-    @owners.each_pair do |name, owner|
-      puts "#{name} has adopted the following pets:"
-      owner.print_pets
-      puts
+    adopters.uniq.each do |owner|
+      puts "#{owner.name} has adopted the following pets:"
+      owner.pets.each do |pet|
+        puts pet
+      end
+      puts ''
     end
   end
 end
@@ -72,3 +71,18 @@ shelter.adopt(bholmes, chester)
 shelter.print_adoptions
 puts "#{phanson.name} has #{phanson.number_of_pets} adopted pets."
 puts "#{bholmes.name} has #{bholmes.number_of_pets} adopted pets."
+
+# Expected Output
+# P Hanson has adopted the following pets:
+# a cat named Butterscotch
+# a cat named Pudding
+# a bearded dragon named Darwin
+#
+# B Holmes has adopted the following pets:
+# a dog named Molly
+# a parakeet named Sweetie Pie
+# a dog named Kennedy
+# a fish named Chester
+#
+# P Hanson has 3 adopted pets.
+# B Holmes has 4 adopted pets.
